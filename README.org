@@ -1,0 +1,3 @@
+* PICROSSJS
+
+Hi world, this is going to remake picross in javascript. It will be pretty cool.
