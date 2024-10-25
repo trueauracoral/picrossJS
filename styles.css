@@ -8,17 +8,9 @@ body {
 }
 
 canvas {
-    background-color: #111;
-}
-
-#player1Score {
-    left: 35%;
-    bottom: 80%;
-}
-
-#player2Score {
-    right: 35%;
-    bottom: 80%;
+    transform: scale(2);
+    image-rendering: pixelated;
+    background-color: #ffff;
 }
 
 h1 {

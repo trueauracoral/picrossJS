@@ -1,35 +1,32 @@
-class bird { 
-    constructor(pos, velocity, radius) {
+class imageDrawingTool { 
+    constructor(pos, velocity) {
         this.pos = pos;
         this.velocity = velocity;
-        this.radius = radius;
     }
-
+        
     update() {
-        this.pos.y += this.velocity.y;
+        //this.pos.y += this.velocity.y;
     };
-
+        
     draw() {
-        ctx.fillStyle = "#ffffff";
-        //ctx.fillRect(this.pos.x, this.pos.y, this.radius, this.radius);
-        ctx.beginPath();
-        ctx.arc(this.pos.x, this.pos.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
+        ctx.drawImage(testImage, 30, 30)
     };
 }
+
+var testImage = loadImage("./img/ScaledTestIMG.png");
 
 const canvas = document.getElementById('canvas');
 
 const ctx = canvas.getContext('2d');
 
-canvas.width = 480;
-canvas.height = 640;
+canvas.width = 160;
+canvas.height = 144;
+canvas.style = "transform"
 
 const halfWidth = canvas.width / 2;
 const halfHeight = canvas.height / 2;
 
-const Bird = new bird(vec2(halfWidth - 50, halfHeight), vec2(5,5), 15)
+const TestImage = new imageDrawingTool(vec2(halfWidth - 50, halfHeight), vec2(5,5), 15)
 
 function startGame() {
     gameLoop();
@@ -51,11 +48,11 @@ function vec2(x, y) {
 }
 
 function gameUpdate() {
-    Bird.update();
+    //draw.update();
 }
 
 function gameDraw() {
-    Bird.draw();
+    TestImage.draw();
 }
 
 function gameLoop() {
@@ -67,4 +64,15 @@ function gameLoop() {
     gameDraw()
 
 }
+function loadImage(src) {
+    var img = new Image();
+    img.src = src;
+    img.id = 
+    this.onload = function() {
+        return true;
+    }
+    return img;
+}
+
+
 gameLoop();
