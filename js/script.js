@@ -58,23 +58,31 @@ squareSize = 60
 
 function gameDraw() {
     TestImage.draw();
-    for (var i = 0; i < squareSize; i++) {
-        for (var j = 0; j < squareSize; j++) {
-            console.log(`x: ${i}, y: ${j}`);
-            if (i <= 1 || j <=1 || i == squareSize - 1) {
-                drawPixel(i, j);
-            }
-        }
+    ctx.beginPath();
+    ctx.moveTo(10, 10)
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 10; i++) {
+        ctx.moveTo(0, i * 6);
+        ctx.lineTo(squareSize, i * 6);
     }
+
+    for (let j = 0; j <= 10; j++) {
+        ctx.moveTo(j * 6, 0);
+        ctx.lineTo(j * 6, squareSize);
+    }
+    ctx.stroke();
 }
 
 function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     window.requestAnimationFrame(gameLoop);
+    setTimeout(() => {
+        gameUpdate();
+        gameDraw()
 
-    gameUpdate();
-    gameDraw()
+    }, 1000/25)
+
 
 }
 function loadImage(src) {
