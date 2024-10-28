@@ -9,11 +9,11 @@ class imageDrawingTool {
     };
         
     draw() {
-        ctx.drawImage(testImage, 30, 30)
+        ctx.drawImage(testImage, 45, 45)
     };
 }
 
-var testImage = loadImage("./img/ScaledTestIMG.png");
+var testImage = loadImage("./img/balloons.png");
 
 const canvas = document.getElementById('canvas');
 
@@ -21,7 +21,6 @@ const ctx = canvas.getContext('2d');
 
 canvas.width = 160;
 canvas.height = 144;
-canvas.style = "transform"
 
 const halfWidth = canvas.width / 2;
 const halfHeight = canvas.height / 2;
@@ -51,8 +50,22 @@ function gameUpdate() {
     //draw.update();
 }
 
+function drawPixel(x, y) {
+    ctx.fillRect(x, y, 1, 1);
+}
+
+squareSize = 60
+
 function gameDraw() {
     TestImage.draw();
+    for (var i = 0; i < squareSize; i++) {
+        for (var j = 0; j < squareSize; j++) {
+            console.log(`x: ${i}, y: ${j}`);
+            if (i <= 1 || j <=1 || i == squareSize - 1) {
+                drawPixel(i, j);
+            }
+        }
+    }
 }
 
 function gameLoop() {
