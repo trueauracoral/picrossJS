@@ -18,6 +18,7 @@ var testImage = loadImage("./img/balloons.png");
 const canvas = document.getElementById('canvas');
 
 const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
 
 canvas.width = 160;
 canvas.height = 144;
@@ -56,21 +57,34 @@ function drawPixel(x, y) {
 
 squareSize = 60
 
+function drawGrid(startX, startY, width, height, gridSize) {
+
+    // Draw vertical lines
+    var counter = 0;
+    for (let x = startX; x <= startX + width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x+0.5, startY+0.5);
+        ctx.lineTo(x+0.5, startY + height+0.5);
+        ctx.lineWidth = 1
+        ctx.stroke();
+        counter++;
+        console.log(counter);
+    }
+    counter = 0;
+        
+    // Draw horizontal lines
+    for (let y = startY; y <= startY + height; y += gridSize) {
+        ctx.lineWidth = 1
+        ctx.beginPath();
+        ctx.moveTo(startX+0.5, y+0.5);
+        ctx.lineTo(startX + width+0.5, y+0.5);
+        ctx.stroke();
+    }
+}
+
 function gameDraw() {
     TestImage.draw();
-    ctx.beginPath();
-    ctx.moveTo(10, 10)
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 10; i++) {
-        ctx.moveTo(0, i * 6);
-        ctx.lineTo(squareSize, i * 6);
-    }
-
-    for (let j = 0; j <= 10; j++) {
-        ctx.moveTo(j * 6, 0);
-        ctx.lineTo(j * 6, squareSize);
-    }
-    ctx.stroke();
+    drawGrid(45, 45, 60, 60, 6);
 }
 
 function gameLoop() {

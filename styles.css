@@ -8,7 +8,7 @@ body {
 }
 
 canvas {
-    transform: scale(2);
+    box-sizing: unset;
     image-rendering: pixelated;
     background-color: #ffff;
 }
