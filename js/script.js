@@ -113,6 +113,19 @@ horizontalMeasures = [
     [1, 6, 1]
 ]
 
+verticalMeasurers = [
+    [9],
+    [1, 1, 2],
+    [1, 6],
+    [5, 4],
+    [4, 4],
+    [1, 7],
+    [1, 3, 3],
+    [4, 3],
+    [1, 2, 3],
+    [4, 1, 3],
+]
+
 var maxLen = horizontalMeasures[1].length;
 for (var i = 0; i < horizontalMeasures.length; i++) {
     if (horizontalMeasures[i].length > maxLen) {
@@ -124,31 +137,34 @@ function gameDraw() {
     TestImage.draw();
     drawGrid(45, 45, 60, 60, 6);
 
-    const charWidth = 3;      // Width of each character in pixels
-    const charSpacing = 3;    // Spacing between characters
-    const totalWidth = 60;    // Total width available for numbers in the grid
+    const charWidth = 3;   
+    const charSpacing = 3; 
+    const totalWidth = 60; 
 
-    // Adjust this value to move the text left or right
-    const horizontalOffset = -30; // Negative value moves left, positive moves right
+    const horizontalOffset = -30;
 
     for (let i = 0; i < horizontalMeasures.length; i++) {
-        let startY = 43 + 6 * i; // Calculate the Y position for the current row
+        let startY = 43 + 6 * i;
 
-        // Calculate the total width of the current row's numbers
         let totalTextWidth = 0;
         for (let j = 0; j < horizontalMeasures[i].length; j++) {
-            totalTextWidth += charWidth + charSpacing; // Accumulate width for each number
+            totalTextWidth += charWidth + charSpacing;
         }
         
-        // Calculate starting X position for right-aligned text, with offset
-        let startX = totalWidth - totalTextWidth + 10 + horizontalOffset; // Adjust for a margin and offset
+        let startX = totalWidth - totalTextWidth + 10 + horizontalOffset;
 
         for (let j = 0; j < horizontalMeasures[i].length; j++) {
-            const number = horizontalMeasures[i][j]; // Get the current number
-            drawPixelText(number.toString(), startX, startY); // Draw the number
+            const number = horizontalMeasures[i][j]; 
+            drawPixelText(number.toString(), startX, startY);
             
-            // Move the startX position to the right for the next character
             startX += charWidth + charSpacing;
+        }
+    }
+
+    for (let row = 0; row < verticalMeasurers.length; row++) {
+        for (let col = 0; col < verticalMeasurers[row].length; col++) {
+            const number = verticalMeasurers[row][col];
+            drawPixelText(number.toString(), 46+6 * row, 33 - (6*col))
         }
     }
 }
