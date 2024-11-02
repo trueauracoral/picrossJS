@@ -1,7 +1,8 @@
 class imageDrawingTool { 
-    constructor(pos, velocity) {
+    constructor(pos, velocity, imageIMG) {
         this.pos = pos;
         this.velocity = velocity;
+        this.imageIMG = imageIMG;
     }
         
     update() {
@@ -9,11 +10,12 @@ class imageDrawingTool {
     };
         
     draw() {
-        ctx.drawImage(testImage, 45, 45)
+        ctx.drawImage(this.imageIMG, 45, 45)
     };
 }
 
-var testImage = loadImage("./img/balloons.png");
+var balloons_white = loadImage("./img/balloons-white.png");
+var balloons = loadImage("./img/balloons.png")
 
 const canvas = document.getElementById('canvas');
 
@@ -28,7 +30,7 @@ ctx.scale(scalingFactor, scalingFactor);
 const halfWidth = canvas.width / 2;
 const halfHeight = canvas.height / 2;
 
-const TestImage = new imageDrawingTool(vec2(halfWidth - 50, halfHeight), vec2(5,5), 15)
+const TestImage = new imageDrawingTool(vec2(halfWidth - 50, halfHeight), vec2(5,5), balloons_white)
 
 function startGame() {
     gameLoop();
@@ -60,27 +62,54 @@ function drawPixel(x, y) {
 squareSize = 60
 
 function drawGrid(startX, startY, width, height, gridSize) {
-
+    // Draw horizontal lines
+    counter = 0
+    for (let y = startY; y <= startY + height; y += gridSize) {
+        ctx.lineWidth = 1
+        ctx.beginPath();
+        ctx.moveTo(startX+ 1, y);
+        ctx.lineTo(startX + width, y);
+        counter++;
+        if (counter == 1 || counter == 6 || counter == 11) {
+            ctx.strokeStyle = "#000"
+        } else {
+            ctx.strokeStyle = "#c9e9f2"
+        }
+        ctx.stroke();
+    }
+    counter = 0;
+    
     // Draw vertical lines
     var counter = 0;
     for (let x = startX; x <= startX + width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x+0.5, startY+0.5);
-        ctx.lineTo(x+0.5, startY + height+0.5);
+        ctx.lineTo(x+0.5, startY + height-0.5);
+        counter++;
+        if (counter == 1 || counter == 6|| counter == 11) {
+            ctx.strokeStyle = "#000";
+        }
+        else {
+            ctx.strokeStyle = "#c9e9f2"
+        }
         ctx.lineWidth = 1
         ctx.stroke();
-        counter++;
     }
     counter = 0;
-        
-    // Draw horizontal lines
+    
+    counter = 0
     for (let y = startY; y <= startY + height; y += gridSize) {
         ctx.lineWidth = 1
         ctx.beginPath();
-        ctx.moveTo(startX+0.5, y+0.5);
-        ctx.lineTo(startX + width+0.5, y+0.5);
-        ctx.stroke();
+        ctx.moveTo(startX+ 1, y);
+        ctx.lineTo(startX + width, y);
+        counter++;
+        if (counter == 6) {
+            ctx.strokeStyle = "#000"
+            ctx.stroke();
+        }
     }
+    counter = 0;
 }
 
 const loadFont = () => {
@@ -141,7 +170,7 @@ function gameDraw() {
     const charSpacing = 3; 
     const totalWidth = 60; 
 
-    const horizontalOffset = -30;
+    const horizontalOffset = -27;
 
     for (let i = 0; i < horizontalMeasures.length; i++) {
         let startY = 43 + 6 * i;
@@ -164,7 +193,7 @@ function gameDraw() {
     for (let row = 0; row < verticalMeasurers.length; row++) {
         for (let col = 0; col < verticalMeasurers[row].length; col++) {
             const number = verticalMeasurers[row][col];
-            drawPixelText(number.toString(), 46+6 * row, 33 - (6*col))
+            drawPixelText(number.toString(), 46+6 * row, 35 - (6*col))
         }
     }
 }
