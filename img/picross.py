@@ -49,6 +49,7 @@ for row in cellGrid:
     for item in row:
         print(item, end="\t")
     print()
+print(cellGrid)
 
 # Generate vertical and horizontal numbers
 horizontal_markers = []
@@ -99,7 +100,6 @@ for y in range(height):
         pixel = pixel[:3]
         if pixel == outlineColor:
             count = count + 1
-            print(count)
         else:
             pixel_data[x, y] = (255,255,255)
 

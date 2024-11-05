@@ -126,6 +126,13 @@ function drawPixelText(text, x, y) {
     ctx.imageSmoothingEnabled = false; 
     ctx.textBaseline = 'top';
     ctx.fillStyle = "#000"; 
+    
+    charLength = text.toString().length;
+    console.log(charLength);
+    if (charLength == 2) {
+        x -= 4
+    }
+
     ctx.fillText(text, x, y);
 }
 
@@ -166,34 +173,26 @@ function gameDraw() {
     TestImage.draw();
     drawGrid(45, 45, 60, 60, 6);
 
-    const charWidth = 3;   
-    const charSpacing = 3; 
-    const totalWidth = 60; 
+    for (let row = 0; row < horizontalMeasures.length; row++) {
+        for (let col = 0; col < horizontalMeasures[row].length; col++) {
+            const number = horizontalMeasures[row][col];
+            const charLength = number.toString().length;
+            const offset = charLength === 2 ? -4 : 0;
 
-    const horizontalOffset = -27;
+            xPos = 40 - (6 * col);
+            yPos = 42 +6 * row
 
-    for (let i = 0; i < horizontalMeasures.length; i++) {
-        let startY = 43 + 6 * i;
-
-        let totalTextWidth = 0;
-        for (let j = 0; j < horizontalMeasures[i].length; j++) {
-            totalTextWidth += charWidth + charSpacing;
+            if (col != 0) {
+            xPos += offset;
+            }
+            drawPixelText(number.toString(), xPos, yPos);
         }
-        
-        let startX = totalWidth - totalTextWidth + 10 + horizontalOffset;
-
-        for (let j = 0; j < horizontalMeasures[i].length; j++) {
-            const number = horizontalMeasures[i][j]; 
-            drawPixelText(number.toString(), startX, startY);
-            
-            startX += charWidth + charSpacing;
-        }
-    }
+      }
 
     for (let row = 0; row < verticalMeasurers.length; row++) {
         for (let col = 0; col < verticalMeasurers[row].length; col++) {
             const number = verticalMeasurers[row][col];
-            drawPixelText(number.toString(), 46+6 * row, 35 - (6*col))
+            drawPixelText(number, 46+6 * row, 35 - (6*col))
         }
     }
 }
