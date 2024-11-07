@@ -10,7 +10,7 @@ class imageDrawingTool {
     };
         
     draw() {
-        ctx.drawImage(this.imageIMG, 45, 45)
+        ctx.drawImage(this.imageIMG, startX, startY)
     };
 }
 
@@ -29,6 +29,9 @@ ctx.scale(scalingFactor, scalingFactor);
 
 const halfWidth = canvas.width / 2;
 const halfHeight = canvas.height / 2;
+
+var startX = 45;
+var startY = 45;
 
 const TestImage = new imageDrawingTool(vec2(halfWidth - 50, halfHeight), vec2(5,5), balloons_white)
 
@@ -128,7 +131,6 @@ function drawPixelText(text, x, y) {
     ctx.fillStyle = "#000"; 
     
     charLength = text.toString().length;
-    console.log(charLength);
     if (charLength == 2) {
         x -= 4
     }
@@ -161,6 +163,38 @@ verticalMeasurers = [
     [1, 2, 3],
     [4, 1, 3],
 ]
+for (var i = 0; i < verticalMeasurers.length; i++) {
+    verticalMeasurers[i] = verticalMeasurers[i].reverse();
+}
+
+for (var i = 0; i < horizontalMeasures.length; i++) {
+    horizontalMeasures[i] = horizontalMeasures[i].reverse();
+}
+
+cellGrid = [
+    [false, true, true, true, true, true, true, true, true, true],
+    [true, false, false, true, true, false, false, true, false, true],
+    [true, false, false, true, true, false, false, true, false, true],
+    [true, false, false, true, true, true, true, true, true, true],
+    [true, true, true, true, false, true, true, false, true, false], 
+    [true, false, true, false, false, true, true, false, false, true],
+    [true, true, true, true, true, true, false, false, true, false],
+    [true, true, true, true, true, true, true, true, true, true],
+    [true, false, true, true, true, true, true, true, true, true],
+    [true, false, true, true, true, true, true, true, false, true]
+]
+
+newCellGrid = [
+
+]
+for (var row = 0; row < cellGrid.length; row++) {
+    newcelllist = [];
+    for (var col = 0; col < cellGrid[row].length; col++) {
+        newcelllist.push(false);
+    }
+    newCellGrid.push(newcelllist);
+}
+console.log(newCellGrid);
 
 var maxLen = horizontalMeasures[1].length;
 for (var i = 0; i < horizontalMeasures.length; i++) {
@@ -170,11 +204,25 @@ for (var i = 0; i < horizontalMeasures.length; i++) {
 }
 maxLen *= 2;
 function gameDraw() {
-    TestImage.draw();
-    drawGrid(45, 45, 60, 60, 6);
+    //TestImage.draw();
+    for (var row = 0; row < newCellGrid.length; row++) {
+        for (var col = 0; col < newCellGrid[row].length; col++) {
+            var isFilledCell = newCellGrid[col][row];
 
+            if (isFilledCell) {
+                ctx.drawImage(balloons_white, 
+                    row * 6, col *6, 
+                    6, 6,
+                    startX + row * 6, startY +col *6,
+                    6, 6
+                );
+            }
+        }
+    }
+    
+    drawGrid(startX, startY, 60, 60, 6);
     for (let row = 0; row < horizontalMeasures.length; row++) {
-        for (let col = 0; col < horizontalMeasures[row].length; col++) {
+        for (let col = horizontalMeasures[row].length -1; col >= 0; col--) {
             const number = horizontalMeasures[row][col];
             const charLength = number.toString().length;
             const offset = charLength === 2 ? -4 : 0;
@@ -187,7 +235,7 @@ function gameDraw() {
             }
             drawPixelText(number.toString(), xPos, yPos);
         }
-      }
+    }
 
     for (let row = 0; row < verticalMeasurers.length; row++) {
         for (let col = 0; col < verticalMeasurers[row].length; col++) {
@@ -219,5 +267,44 @@ function loadImage(src) {
     return img;
 }
 
+function getMousePosition(canvas, event) {
+    let rect = canvas.getBoundingClientRect();
+    let x = (event.clientX - rect.left) / 8 ;
+    let y = (event.clientY - rect.top) / 8;
+    return {x: x, y: y};
+}
+document.addEventListener('pointerdown', (event) => {
+    console.log(event.button);
+    if (event.button == 0) {
+        console.log("MOUSE CLICKED");
+        var mouseCoords = getMousePosition(canvas, event);
+        console.log(mouseCoords);
+    
+        mouseCoords.x -= startX - 1;
+        mouseCoords.y -= startY -1;
+        
+        console.log(mouseCoords);
+        mouseCoords.x /= 6;
+        mouseCoords.y /= 6;
+        console.log(mouseCoords);
+        
+        mouseCoords.x = Math.ceil(mouseCoords.x);
+        mouseCoords.y = Math.ceil(mouseCoords.y);
+        mouseCoords.x -= 1;
+        mouseCoords.y -= 1;
+        console.log(mouseCoords);
+        console.log(cellGrid[mouseCoords.x][mouseCoords.y]);
+    
+        if (cellGrid[mouseCoords.y][mouseCoords.x] == true) {
+            newCellGrid[mouseCoords.y][mouseCoords.x] = true;
+        };
+    } else if (event.button == 2) {
+        console.log("right click")
+    }
+});
+
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
 
 gameLoop();
