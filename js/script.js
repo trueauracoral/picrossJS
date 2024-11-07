@@ -16,6 +16,7 @@ class imageDrawingTool {
 
 var balloons_white = loadImage("./img/balloons-white.png");
 var balloons = loadImage("./img/balloons.png")
+var xmark = loadImage("./img/xmark.png")
 
 const canvas = document.getElementById('canvas');
 
@@ -208,7 +209,6 @@ function gameDraw() {
     for (var row = 0; row < newCellGrid.length; row++) {
         for (var col = 0; col < newCellGrid[row].length; col++) {
             var isFilledCell = newCellGrid[col][row];
-
             if (isFilledCell) {
                 ctx.drawImage(balloons_white, 
                     row * 6, col *6, 
@@ -216,6 +216,9 @@ function gameDraw() {
                     startX + row * 6, startY +col *6,
                     6, 6
                 );
+            } else if (isFilledCell == 'x') {
+                console.log("x");
+                ctx.drawimage(xmark, startX + row * 6, startY + col*6);
             }
         }
     }
@@ -275,31 +278,33 @@ function getMousePosition(canvas, event) {
 }
 document.addEventListener('pointerdown', (event) => {
     console.log(event.button);
-    if (event.button == 0) {
-        console.log("MOUSE CLICKED");
-        var mouseCoords = getMousePosition(canvas, event);
-        console.log(mouseCoords);
+    var mouseCoords = getMousePosition(canvas, event);
+    console.log(mouseCoords);
+
+    mouseCoords.x -= startX - 1;
+    mouseCoords.y -= startY -1;
     
-        mouseCoords.x -= startX - 1;
-        mouseCoords.y -= startY -1;
-        
-        console.log(mouseCoords);
-        mouseCoords.x /= 6;
-        mouseCoords.y /= 6;
-        console.log(mouseCoords);
-        
-        mouseCoords.x = Math.ceil(mouseCoords.x);
-        mouseCoords.y = Math.ceil(mouseCoords.y);
-        mouseCoords.x -= 1;
-        mouseCoords.y -= 1;
-        console.log(mouseCoords);
-        console.log(cellGrid[mouseCoords.x][mouseCoords.y]);
+    console.log(mouseCoords);
+    mouseCoords.x /= 6;
+    mouseCoords.y /= 6;
+    console.log(mouseCoords);
+    
+    mouseCoords.x = Math.ceil(mouseCoords.x);
+    mouseCoords.y = Math.ceil(mouseCoords.y);
+    mouseCoords.x -= 1;
+    mouseCoords.y -= 1;
+    console.log(mouseCoords);
+    console.log(cellGrid[mouseCoords.x][mouseCoords.y]);
+    if (event.button == 0) {
+        console.log("left click");
     
         if (cellGrid[mouseCoords.y][mouseCoords.x] == true) {
             newCellGrid[mouseCoords.y][mouseCoords.x] = true;
         };
     } else if (event.button == 2) {
         console.log("right click")
+        cellGrid[mouseCoords.y][mouseCoords.x] = "x";
+        console.log(cellGrid);
     }
 });
 
