@@ -209,7 +209,7 @@ function gameDraw() {
     for (var row = 0; row < newCellGrid.length; row++) {
         for (var col = 0; col < newCellGrid[row].length; col++) {
             var isFilledCell = newCellGrid[col][row];
-            if (isFilledCell) {
+            if (isFilledCell == true) {
                 ctx.drawImage(balloons_white, 
                     row * 6, col *6, 
                     6, 6,
@@ -217,8 +217,9 @@ function gameDraw() {
                     6, 6
                 );
             } else if (isFilledCell == 'x') {
-                console.log("x");
-                ctx.drawimage(xmark, startX + row * 6, startY + col*6);
+                console.log("HI x");
+                //HI
+                ctx.drawImage(xmark, startX + row * 6 + 1, startY + col*6+0.5);
             }
         }
     }
@@ -303,7 +304,7 @@ document.addEventListener('pointerdown', (event) => {
         };
     } else if (event.button == 2) {
         console.log("right click")
-        cellGrid[mouseCoords.y][mouseCoords.x] = "x";
+        newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
         console.log(cellGrid);
     }
 });
