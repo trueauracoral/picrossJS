@@ -14,8 +14,9 @@ class imageDrawingTool {
     };
 }
 
-var balloons_white = loadImage("./img/balloons-white.png");
-var balloons = loadImage("./img/balloons.png")
+var ImageString = "balloons"
+var imageIMG_white = loadImage(`./img/${ImageString}-white.png`);
+var imageIMG = loadImage(`./img/${ImageString}.png`)
 var xmark = loadImage("./img/xmark.png")
 
 const canvas = document.getElementById('canvas');
@@ -31,10 +32,12 @@ ctx.scale(scalingFactor, scalingFactor);
 const halfWidth = canvas.width / 2;
 const halfHeight = canvas.height / 2;
 
+var die = false
+
 var startX = 45;
 var startY = 45;
 
-const TestImage = new imageDrawingTool(vec2(halfWidth - 50, halfHeight), vec2(5,5), balloons_white)
+const TestImage = new imageDrawingTool(vec2(halfWidth - 50, halfHeight), vec2(5,5), imageIMG_white)
 
 function startGame() {
     gameLoop();
@@ -55,8 +58,30 @@ function vec2(x, y) {
     return {x: x, y: y};
 }
 
+var minute = 20;
+var sec = 60;
+var counter = 0;
+minute--;
 function gameUpdate() {
+    counter++;
+    drawPixelText(`${minute}: ${sec}`, 25, 20);
+    if (counter % 16 == 0) {
+        console.log(minute)
+        if (minute <= 0) {
+            die = true;
+            minute = 0;
+            sec = 0;
+            return;
+        } else {
+            sec--;
+            if (sec == 0) {
+                minute--;
+                sec = 60;
+            }
+        }
+    }
     //draw.update();
+
 }
 
 function drawPixel(x, y) {
@@ -215,27 +240,26 @@ for (var i = 0; i < horizontalMeasures.length; i++) {
     }
 }
 maxLen *= 2;
+var puzzleComplete = 0;
 function gameDraw() {
     //TestImage.draw();
     for (var row = 0; row < newCellGrid.length; row++) {
         for (var col = 0; col < newCellGrid[row].length; col++) {
             var isFilledCell = newCellGrid[col][row];
             if (isFilledCell == true) {
-                ctx.drawImage(balloons_white, 
+                ctx.drawImage(imageIMG_white, 
                     row * 6, col *6, 
                     6, 6,
                     startX + row * 6, startY +col *6,
                     6, 6
                 );
             } else if (isFilledCell == 'x') {
-                console.log("HI x");
                 //HI
                 ctx.drawImage(xmark, startX + row * 6 + 1, startY + col*6+0.5);
             }
         }
     }
     
-    drawGrid(startX, startY, 60, 60, 6);
     for (let row = 0; row < horizontalMeasures.length; row++) {
         for (let col = horizontalMeasures[row].length -1; col >= 0; col--) {
             const number = horizontalMeasures[row][col];
@@ -258,19 +282,21 @@ function gameDraw() {
             drawPixelText(number, 46+6 * row, 35 - (6*col))
         }
     }
+    drawPixelText(puzzleComplete+"%", 30, 30);
+
+    if (puzzleComplete == 100) {
+        ctx.drawImage(imageIMG, startX, startY + 0.5);
+    } else {
+        drawGrid(startX, startY, 60, 60, 6);
+    }
 }
 
 function gameLoop() {
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     window.requestAnimationFrame(gameLoop);
-    setTimeout(() => {
-        gameUpdate();
-        gameDraw()
-
-    }, 1000/25)
-
-
+    gameUpdate();
+    gameDraw()
 }
 function loadImage(src) {
     var img = new Image();
@@ -312,12 +338,16 @@ document.addEventListener('pointerdown', (event) => {
     
         if (cellGrid[mouseCoords.y][mouseCoords.x] == true) {
             newCellGrid[mouseCoords.y][mouseCoords.x] = true;
-        };
+        } else {
+            if (die != true) {
+                minute -= 2;
+            }
+        }
     } else if (event.button == 2) {
         console.log("right click")
         newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
         console.log(cellGrid);
-    }
+    } 
     
     var filledCounter = 0;
     for (var row = 0; row < newCellGrid.length; row++) {
@@ -328,11 +358,10 @@ document.addEventListener('pointerdown', (event) => {
             }
         }
     }
-    var puzzleComplete = Math.ceil(((filledCounter/correctCounter) * 100).toFixed(2));
+    puzzleComplete = Math.ceil(((filledCounter/correctCounter) * 100).toFixed(2));
     console.log(puzzleComplete);
-    if (puzzleComplete == 100) {
-        console.log("HOORAY");
-    }
+
+
 });
 
 document.addEventListener('contextmenu', function(e) {
