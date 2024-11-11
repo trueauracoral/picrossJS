@@ -2,7 +2,7 @@
 from PIL import Image
 
 # Open image
-imagename = "balloons.png"
+imagename = "scorpion.png"
 image = Image.open(imagename)
 # COLOR OF OUTLINE IN THE IMAGE
 outlineColor = (0,0,0)
@@ -101,6 +101,6 @@ for y in range(height):
         if pixel == outlineColor:
             count = count + 1
         else:
-            pixel_data[x, y] = (255,255,255)
+            pixel_data[x, y] = (104,71,235)
 
 image.save(imagename.replace(".png", "") + "-white.png", format="png")

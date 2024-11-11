@@ -185,6 +185,17 @@ cellGrid = [
     [true, false, true, true, true, true, true, true, false, true]
 ]
 
+var correctCounter = 0;
+for (var row = 0; row < cellGrid.length; row++) {
+    for (var col = 0; col < cellGrid[row].length; col++) {
+        var value = cellGrid[row][col];
+        if (value == true) {
+            correctCounter++;
+        }
+    }
+}
+console.log("Correct: " + correctCounter);
+
 newCellGrid = [
 
 ]
@@ -306,6 +317,21 @@ document.addEventListener('pointerdown', (event) => {
         console.log("right click")
         newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
         console.log(cellGrid);
+    }
+    
+    var filledCounter = 0;
+    for (var row = 0; row < newCellGrid.length; row++) {
+        for (var col = 0; col < newCellGrid[row].length; col++) {
+            var value = newCellGrid[col][row];
+            if (value == true) {
+                filledCounter++;
+            }
+        }
+    }
+    var puzzleComplete = Math.ceil(((filledCounter/correctCounter) * 100).toFixed(2));
+    console.log(puzzleComplete);
+    if (puzzleComplete == 100) {
+        console.log("HOORAY");
     }
 });
 
