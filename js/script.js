@@ -348,13 +348,15 @@ document.addEventListener('pointerdown', (event) => {
                 
             } else {
                 gotItWrong = true;
-    
+                tempCoordinates = getMousePosition(canvas, event);
+                textCoordinates = tempCoordinates;
                 newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
                 if (die != true) {
                     minute -= 2;
                 }
             }
         } else if (event.button == 2) {
+
             newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
         } 
         
