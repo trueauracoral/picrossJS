@@ -32,10 +32,11 @@ ctx.scale(scalingFactor, scalingFactor);
 const halfWidth = canvas.width / 2;
 const halfHeight = canvas.height / 2;
 
-var die = false
+var die = false;
+var gotItWrong = false;
 
-var startX = 45;
-var startY = 45;
+var startX = 50;
+var startY = 50;
 
 const TestImage = new imageDrawingTool(vec2(halfWidth - 50, halfHeight), vec2(5,5), imageIMG_white)
 
@@ -64,13 +65,15 @@ var counter = 0;
 minute--;
 function gameUpdate() {
     counter++;
-    drawPixelText(`${minute}: ${sec}`, 25, 20);
-    if (counter % 16 == 0) {
-        console.log(minute)
+    minute = minute.toString().padStart(2, '0');
+    sec = sec.toString().padStart(2, '0');
+    drawPixelText(`${minute}: ${sec}`, startX-20, startY-28);
+    if (counter % 60 == 0) {
         if (minute <= 0) {
             die = true;
             minute = 0;
             sec = 0;
+            counter = 0;
             return;
         } else {
             sec--;
@@ -219,11 +222,8 @@ for (var row = 0; row < cellGrid.length; row++) {
         }
     }
 }
-console.log("Correct: " + correctCounter);
 
-newCellGrid = [
-
-]
+newCellGrid = []
 for (var row = 0; row < cellGrid.length; row++) {
     newcelllist = [];
     for (var col = 0; col < cellGrid[row].length; col++) {
@@ -231,7 +231,6 @@ for (var row = 0; row < cellGrid.length; row++) {
     }
     newCellGrid.push(newcelllist);
 }
-console.log(newCellGrid);
 
 var maxLen = horizontalMeasures[1].length;
 for (var i = 0; i < horizontalMeasures.length; i++) {
@@ -241,6 +240,7 @@ for (var i = 0; i < horizontalMeasures.length; i++) {
 }
 maxLen *= 2;
 var puzzleComplete = 0;
+var gotitwrongcounter = 0;
 function gameDraw() {
     //TestImage.draw();
     for (var row = 0; row < newCellGrid.length; row++) {
@@ -266,8 +266,8 @@ function gameDraw() {
             const charLength = number.toString().length;
             const offset = charLength === 2 ? -4 : 0;
 
-            xPos = 40 - (6 * col);
-            yPos = 42 +6 * row
+            xPos = startX-5 - (6 * col);
+            yPos = startY-3 + 6 * row
 
             if (col != 0) {
             xPos += offset;
@@ -279,15 +279,26 @@ function gameDraw() {
     for (let row = 0; row < verticalMeasurers.length; row++) {
         for (let col = 0; col < verticalMeasurers[row].length; col++) {
             const number = verticalMeasurers[row][col];
-            drawPixelText(number, 46+6 * row, 35 - (6*col))
+            drawPixelText(number, startX+6 * row, startY-10 - (6*col))
         }
     }
-    drawPixelText(puzzleComplete+"%", 30, 30);
-
+    var completeLength = puzzleComplete.toString().length -1
+    drawPixelText(puzzleComplete+"%", startX - 10 - completeLength*8, startY-15);
     if (puzzleComplete == 100) {
-        ctx.drawImage(imageIMG, startX, startY + 0.5);
+        ctx.drawImage(imageIMG, startX, startY - 0.5);
     } else {
         drawGrid(startX, startY, 60, 60, 6);
+    }
+
+    var maxTimeCounter = 30;
+    var textCoordinates = {x:'0', y:'0'}
+    if (gotItWrong && gotitwrongcounter < maxTimeCounter) {
+        drawPixelText("-2", textCoordinates.x, textCoordinates.y);
+        gotitwrongcounter++;
+    }
+    if (gotitwrongcounter == maxTimeCounter) {
+        gotItWrong = false;
+        gotitwrongcounter = 0;
     }
 }
 
@@ -315,52 +326,49 @@ function getMousePosition(canvas, event) {
     return {x: x, y: y};
 }
 document.addEventListener('pointerdown', (event) => {
-    console.log(event.button);
     var mouseCoords = getMousePosition(canvas, event);
-    console.log(mouseCoords);
 
     mouseCoords.x -= startX - 1;
     mouseCoords.y -= startY -1;
     
-    console.log(mouseCoords);
     mouseCoords.x /= 6;
     mouseCoords.y /= 6;
-    console.log(mouseCoords);
     
     mouseCoords.x = Math.ceil(mouseCoords.x);
     mouseCoords.y = Math.ceil(mouseCoords.y);
     mouseCoords.x -= 1;
     mouseCoords.y -= 1;
-    console.log(mouseCoords);
-    console.log(cellGrid[mouseCoords.x][mouseCoords.y]);
-    if (event.button == 0) {
-        console.log("left click");
+    console.log(mouseCoords.x, mouseCoords.y);
+    if (mouseCoords.x <= 9 && mouseCoords.x >= 0) {
+        if (event.button == 0) {    
+            if (cellGrid[mouseCoords.y][mouseCoords.x] == true) {
+                newCellGrid[mouseCoords.y][mouseCoords.x] = true;
+            } else if (cellGrid[mouseCoords.y][mouseCoords.x] == false && newCellGrid[mouseCoords.y][mouseCoords.x] == "x") {
+                console.log("you allready clicked here")
+                
+            } else {
+                gotItWrong = true;
     
-        if (cellGrid[mouseCoords.y][mouseCoords.x] == true) {
-            newCellGrid[mouseCoords.y][mouseCoords.x] = true;
-        } else {
-            if (die != true) {
-                minute -= 2;
+                newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
+                if (die != true) {
+                    minute -= 2;
+                }
+            }
+        } else if (event.button == 2) {
+            newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
+        } 
+        
+        var filledCounter = 0;
+        for (var row = 0; row < newCellGrid.length; row++) {
+            for (var col = 0; col < newCellGrid[row].length; col++) {
+                var value = newCellGrid[col][row];
+                if (value == true) {
+                    filledCounter++;
+                }
             }
         }
-    } else if (event.button == 2) {
-        console.log("right click")
-        newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
-        console.log(cellGrid);
-    } 
-    
-    var filledCounter = 0;
-    for (var row = 0; row < newCellGrid.length; row++) {
-        for (var col = 0; col < newCellGrid[row].length; col++) {
-            var value = newCellGrid[col][row];
-            if (value == true) {
-                filledCounter++;
-            }
-        }
+        puzzleComplete = Math.ceil(((filledCounter/correctCounter) * 100).toFixed(2));
     }
-    puzzleComplete = Math.ceil(((filledCounter/correctCounter) * 100).toFixed(2));
-    console.log(puzzleComplete);
-
 
 });
 
