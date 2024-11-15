@@ -1,10 +1,49 @@
 body {
+    clear: both;
     overflow: hidden;
-    background-color: #494949;
-    display: flex;
+    background-color: #d14e4e;
+    /*display: flex;*/
     align-items: center;
     justify-content: center;
     height: 100vh; /* Set the body to take up the full height of the viewport */
+    text-align: center;
+}
+
+@font-face {
+    font-family: publicPixel;
+    src: url(font/PublicPixel.ttf);
+}
+button {
+    width: 100px;
+    height: 100px;
+}
+.puzzles {
+    display: flex;
+    gap: 10px;
+}
+.puzzle-container {
+    box-sizing: border-box;
+    position:relative;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+    filter: grayscale(0%);
+}
+.puzzle-container :hover {
+    filter:grayscale(100%);
+}
+img {
+    object-fit: cover;
+    width: 120%;
+    height: 120%;
+}
+
+h1 {
+    font-family: publicPixel;
+}
+p {
+    font-family: publicPixel;
 }
 
 canvas {

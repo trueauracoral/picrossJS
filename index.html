@@ -10,7 +10,31 @@
     </head>
 
     <body>
-        <canvas id="canvas"></canvas>
+        <div>
+            <h1>Picross JS</h1>
+            <p>This is a JavaScript port of picross (nonogram) puzzle.</p>
+        </div>
+        
+        <div class="puzzles">
+            <div class="puzzle-container" id="puzzle-1">
+                <button type="button" onclick="puzzleLoad(0)">
+                    <div id="circle">
+                        <img id="puzzleImage" src="img/balloons.png">
+                    </div>
+                </button>
+            </div>
+            <div class="puzzle-container" id="puzzle-2">
+                <button type="button" onclick="puzzleLoad(1)">
+                    <div id="circle">
+                        <img id="puzzleImage" src="img/scorpion.png">
+                    </div>
+                </button>
+            </div>
+        </div>
+        <br>
+        <div>
+            <canvas id="canvas"></canvas>
+        </div>
         <!--<div id="game" style="display:none">
             <canvas id="canvas"></canvas>
         </div>-->

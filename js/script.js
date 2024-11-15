@@ -1,22 +1,6 @@
-class imageDrawingTool { 
-    constructor(pos, velocity, imageIMG) {
-        this.pos = pos;
-        this.velocity = velocity;
-        this.imageIMG = imageIMG;
-    }
-        
-    update() {
-        //this.pos.y += this.velocity.y;
-    };
-        
-    draw() {
-        ctx.drawImage(this.imageIMG, startX, startY)
-    };
-}
-
-var ImageString = "balloons"
-var imageIMG_white = loadImage(`./img/${ImageString}-white.png`);
-var imageIMG = loadImage(`./img/${ImageString}.png`)
+var ImageString = "balloons";
+var imageIMG_white;
+var imageIMG;
 var xmark = loadImage("./img/xmark.png")
 
 const canvas = document.getElementById('canvas');
@@ -25,8 +9,8 @@ const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 
 const scalingFactor = 8;
-canvas.width = 160 * scalingFactor;
-canvas.height = 144 * scalingFactor;
+canvas.width = 88 * scalingFactor;
+canvas.height = 88 * scalingFactor;
 ctx.scale(scalingFactor, scalingFactor);
 
 const halfWidth = canvas.width / 2;
@@ -35,10 +19,8 @@ const halfHeight = canvas.height / 2;
 var die = false;
 var gotItWrong = false;
 
-var startX = 50;
-var startY = 50;
-
-const TestImage = new imageDrawingTool(vec2(halfWidth - 50, halfHeight), vec2(5,5), imageIMG_white)
+var startX = 25;
+var startY = 27;
 
 function startGame() {
     gameLoop();
@@ -83,8 +65,6 @@ function gameUpdate() {
             }
         }
     }
-    //draw.update();
-
 }
 
 function drawPixel(x, y) {
@@ -167,51 +147,77 @@ function drawPixelText(text, x, y) {
     ctx.fillText(text, x, y);
 }
 
-horizontalMeasures = [
-    [9],
-    [1, 2, 1, 1],
-    [1, 2, 1, 1],
-    [1, 7],
-    [4, 2, 1],
-    [1, 1, 2, 1],
-    [6, 1],
-    [10],
-    [1, 8],
-    [1, 6, 1]
-]
+var puzzleData = [
+    {
+        horizontalMeasurers: [
+            [9],
+            [1, 2, 1, 1],
+            [1, 2, 1, 1],
+            [1, 7],
+            [4, 2, 1],
+            [1, 1, 2, 1],
+            [6, 1],
+            [10],
+            [1, 8],
+            [1, 6, 1],
+        ],
+        verticalMeasurers: [
+            [9],
+            [1, 1, 2],
+            [1, 6],
+            [5, 4],
+            [4, 4],
+            [1, 7],
+            [1, 3, 3],
+            [4, 3],
+            [1, 2, 3],
+            [4, 1, 3],
+        ],
+        cellGrid: [
+            [false, true, true, true, true, true, true, true, true, true],
+            [true, false, false, true, true, false, false, true, false, true],
+            [true, false, false, true, true, false, false, true, false, true],
+            [true, false, false, true, true, true, true, true, true, true],
+            [true, true, true, true, false, true, true, false, true, false], 
+            [true, false, true, false, false, true, true, false, false, true],
+            [true, true, true, true, true, true, false, false, true, false],
+            [true, true, true, true, true, true, true, true, true, true],
+            [true, false, true, true, true, true, true, true, true, true],
+            [true, false, true, true, true, true, true, true, false, true]
+        ],
+        ImageString: "balloons",
+    },
+    {
+        horizontalMeasurers: [
 
-verticalMeasurers = [
-    [9],
-    [1, 1, 2],
-    [1, 6],
-    [5, 4],
-    [4, 4],
-    [1, 7],
-    [1, 3, 3],
-    [4, 3],
-    [1, 2, 3],
-    [4, 1, 3],
+        ],
+        verticalMeasurers: [
+
+        ],
+        cellGrid: [
+
+        ],
+        ImageString: "balloons",
+    },
 ]
+puzzlenumber = 0;
+function puzzleLoad(number) {
+    puzzlenumber = number;
+    ImageString = puzzleData[puzzlenumber]["ImageString"];
+    imageIMG_white = loadImage(`./img/${ImageString}-white.png`);
+    imageIMG = loadImage(`./img/${ImageString}.png`)
+}
+//puzzleLoad(puzzleNumber);
+
+var horizontalMeasures = puzzleData[puzzlenumber]["horizontalMeasurers"]
+var verticalMeasurers = puzzleData[puzzlenumber]["verticalMeasurers"]
 for (var i = 0; i < verticalMeasurers.length; i++) {
     verticalMeasurers[i] = verticalMeasurers[i].reverse();
 }
-
 for (var i = 0; i < horizontalMeasures.length; i++) {
     horizontalMeasures[i] = horizontalMeasures[i].reverse();
 }
-
-cellGrid = [
-    [false, true, true, true, true, true, true, true, true, true],
-    [true, false, false, true, true, false, false, true, false, true],
-    [true, false, false, true, true, false, false, true, false, true],
-    [true, false, false, true, true, true, true, true, true, true],
-    [true, true, true, true, false, true, true, false, true, false], 
-    [true, false, true, false, false, true, true, false, false, true],
-    [true, true, true, true, true, true, false, false, true, false],
-    [true, true, true, true, true, true, true, true, true, true],
-    [true, false, true, true, true, true, true, true, true, true],
-    [true, false, true, true, true, true, true, true, false, true]
-]
+cellGrid = puzzleData[puzzlenumber]["cellGrid"];
 
 var correctCounter = 0;
 for (var row = 0; row < cellGrid.length; row++) {
@@ -243,6 +249,8 @@ var puzzleComplete = 0;
 var gotitwrongcounter = 0;
 var textCoordinates;
 function gameDraw() {
+    //ctx.fillStyle = "#d14e4e"
+    //ctx.fillRect(0, 0, canvas.width, canvas.height);
     //TestImage.draw();
     for (var row = 0; row < newCellGrid.length; row++) {
         for (var col = 0; col < newCellGrid[row].length; col++) {
@@ -280,7 +288,7 @@ function gameDraw() {
     for (let row = 0; row < verticalMeasurers.length; row++) {
         for (let col = 0; col < verticalMeasurers[row].length; col++) {
             const number = verticalMeasurers[row][col];
-            drawPixelText(number, startX+6 * row, startY-10 - (6*col))
+            drawPixelText(number, startX+2+6 * row, startY-10 - (6*col))
         }
     }
     var completeLength = puzzleComplete.toString().length -1
