@@ -241,6 +241,7 @@ for (var i = 0; i < horizontalMeasures.length; i++) {
 maxLen *= 2;
 var puzzleComplete = 0;
 var gotitwrongcounter = 0;
+var textCoordinates;
 function gameDraw() {
     //TestImage.draw();
     for (var row = 0; row < newCellGrid.length; row++) {
@@ -291,7 +292,6 @@ function gameDraw() {
     }
 
     var maxTimeCounter = 30;
-    var textCoordinates = {x:'0', y:'0'}
     if (gotItWrong && gotitwrongcounter < maxTimeCounter) {
         drawPixelText("-2", textCoordinates.x, textCoordinates.y);
         gotitwrongcounter++;
@@ -338,14 +338,12 @@ document.addEventListener('pointerdown', (event) => {
     mouseCoords.y = Math.ceil(mouseCoords.y);
     mouseCoords.x -= 1;
     mouseCoords.y -= 1;
-    console.log(mouseCoords.x, mouseCoords.y);
     if (mouseCoords.x <= 9 && mouseCoords.x >= 0) {
         if (event.button == 0) {    
             if (cellGrid[mouseCoords.y][mouseCoords.x] == true) {
                 newCellGrid[mouseCoords.y][mouseCoords.x] = true;
             } else if (cellGrid[mouseCoords.y][mouseCoords.x] == false && newCellGrid[mouseCoords.y][mouseCoords.x] == "x") {
                 console.log("you allready clicked here")
-                
             } else {
                 gotItWrong = true;
                 tempCoordinates = getMousePosition(canvas, event);
