@@ -1,7 +1,9 @@
 * PICROSSJS
 
-Hi world, this is going to remake picross in javascript. It will be pretty cool.
+Hi world, this is a remake of picross in javascript. It is pretty cool.
 
-** TODO
-- [ ] Percentage wheele
+** TODO [%]
+- [X] Percentage wheele
 - [ ] Check off the width/height markers when completed. make gray.
+- [ ] Tutorial
+- [ ] Add 3 more puzzles

@@ -2,7 +2,7 @@
 from PIL import Image
 
 # Open image
-imagename = "scorpion.png"
+imagename = "redpanda.png"
 image = Image.open(imagename)
 # COLOR OF OUTLINE IN THE IMAGE
 outlineColor = (0,0,0)
@@ -49,7 +49,8 @@ for row in cellGrid:
     for item in row:
         print(item, end="\t")
     print()
-print(cellGrid)
+print()
+print(str(cellGrid).lower()[1:][:-1])
 
 # Generate vertical and horizontal numbers
 horizontal_markers = []
@@ -69,8 +70,9 @@ for row in cellGrid:
         widthMarker = [0]
     horizontal_markers.append(widthMarker)
 
-for marker in horizontal_markers:
-    print(marker)
+print(horizontal_markers)
+#for marker in horizontal_markers:
+#    print(marker)
 print()
 
 vertical_markers = []
@@ -90,8 +92,9 @@ for col in range(columns):
         heightMarker = [0]
     vertical_markers.append(heightMarker)
 
-for marker in vertical_markers:
-    print(marker)
+print(vertical_markers)
+#for marker in vertical_markers:
+#    print(marker)
 
 count = 0
 for y in range(height):
@@ -101,6 +104,6 @@ for y in range(height):
         if pixel == outlineColor:
             count = count + 1
         else:
-            pixel_data[x, y] = (104,71,235)
+            pixel_data[x, y] = (114, 185, 232)
 
 image.save(imagename.replace(".png", "") + "-white.png", format="png")

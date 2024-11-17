@@ -30,30 +30,21 @@
                     </div>
                 </button>
             </div>
+            <div class="puzzle-container" id="puzzle-3">
+                <button type="button" onclick="puzzleLoad(2)">
+                    <div id="circle">
+                        <img id="puzzleImage" src="img/redpanda.png">
+                    </div>
+                </button>
+            </div>
         </div>
         <br>
         <div>
             <canvas id="canvas"></canvas>
         </div>
-        <!--<div id="game" style="display:none">
-            <canvas id="canvas"></canvas>
-        </div>-->
-
-        <!--<img src="./img/logo.png" id="logo" style="display:block">
-        <div id="start" style="display:block">
-            <a href="#" onclick="startGame(1)">
-                <button>
-                    1 Player</a>
-                </button>
-            </a>
-            <a href="#">
-                <button>
-                    2 Player (Not Yet)</a>
-                    <a href="#" onclick ="startGame(2)">2 Player</a>
-                </button>
-            </a>
-        </div>
-        -->
+        <br>
+        <h1>Tutorial</h1>
+        <p>The goal of picross is to fill up the whole board. There are a couple of rules that you need to consider. You need to cover the 10x10 grid with correct cells and X-marked cells which are one you know are incorrect. Use the left click to mark a cell tis correct and use right click to mark a cell you know is not correct. The game runs on a timer. If you incorrectly click a cell you loose the game. On the top and the left side of the grid there are numbers. The numbers represnt the order of correct cells. For example if you see a 10 clue on a 10x10 grid that means that the whole row/column is supposed to be filled. That is super easy. For other cases remember that the clues are the order that they are filled and you can't have anything in between the numbers. Mark an x with right click in between</p>
 
         <script src="./js/script.js"></script>
     </body>

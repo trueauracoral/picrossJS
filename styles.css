@@ -1,7 +1,6 @@
 body {
     clear: both;
     overflow: hidden;
-    background-color: #d14e4e;
     /*display: flex;*/
     align-items: center;
     justify-content: center;
@@ -20,6 +19,10 @@ button {
 .puzzles {
     display: flex;
     gap: 10px;
+    text-align: center;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 }
 .puzzle-container {
     box-sizing: border-box;
