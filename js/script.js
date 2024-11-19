@@ -2,6 +2,7 @@ var ImageString = "balloons";
 var imageIMG_white;
 var imageIMG;
 var xmark = loadImage("./img/xmark.png")
+var lostScreen = loadImage("./img/LostScreen.png");
 
 const canvas = document.getElementById('canvas');
 
@@ -9,8 +10,8 @@ const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 
 const scalingFactor = 8;
-canvas.width = 88 * scalingFactor;
-canvas.height = 88 * scalingFactor;
+canvas.width = 120 * scalingFactor;
+canvas.height = 100 * scalingFactor;
 ctx.scale(scalingFactor, scalingFactor);
 
 const halfWidth = canvas.width / 2;
@@ -19,8 +20,9 @@ const halfHeight = canvas.height / 2;
 var die = false;
 var gameStart = false;
 var gotItWrong = false;
+var mistakes = 0;
 
-var startX = 25;
+var startX = 30;
 var startY = 27;
 
 function startGame() {
@@ -52,14 +54,21 @@ const loadFont = () => {
 
 loadFont();
 
-function drawPixelText(text, x, y) {
+function drawPixelText(text, x, y, outline, color="black") {
     ctx.imageSmoothingEnabled = false; 
     ctx.textBaseline = 'top';
-    ctx.fillStyle = "#000"; 
+    ctx.fillStyle = color; 
     
     charLength = text.toString().length;
     if (charLength == 2) {
         x -= 4
+    }
+
+    if (outline) {
+        ctx.fillStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'black';
+        ctx.strokeText(text, x, y);
     }
 
     ctx.fillText(text, x, y);
@@ -172,6 +181,8 @@ var verticalMeasurers = [];
 var correctCounter = 0;
 var cellGrid;
 function puzzleLoad(number) {
+    die = false;
+    mistakes = 0;
     puzzlenumber = number;
     ImageString = puzzleData[puzzlenumber]["ImageString"];
     imageIMG_white = loadImage(`./img/${ImageString}-white.png`);
@@ -218,7 +229,8 @@ function puzzleLoad(number) {
     gameStart = true;
     gameLoop();
 }
-//puzzleLoad(puzzlenumber);
+
+puzzleLoad(0);
 var minute = 20;
 var sec = 60;
 var counter = 0;
@@ -338,7 +350,19 @@ function gameDraw() {
             if (col != 0) {
                 xPos += offset;
             }
-            drawPixelText(number.toString(), xPos, yPos);
+
+            var editedGridLine = newCellGrid[row].slice();
+            for (var i = 0; i < editedGridLine.length; i++) {
+                if (editedGridLine[i] == "x") {
+                    editedGridLine[i] = false;
+                }
+            }
+            var GridLine = cellGrid[row];
+            if (JSON.stringify(editedGridLine) === JSON.stringify(GridLine)) {
+                drawPixelText(number.toString(), xPos, yPos, false, "#6b6b6b");
+            } else {
+                drawPixelText(number.toString(), xPos, yPos)
+            }
         }
     }
 
@@ -355,12 +379,30 @@ function gameDraw() {
             let yPos = startY - 10 - (6 * row);
     
             xPos += offset;
-    
-            drawPixelText(number.toString(), xPos, yPos);
+            
+            const editedGridLine = [];
+            for (let i = 0; i < newCellGrid.length; i++) {
+                var numvalue = newCellGrid[i][col];
+                if (numvalue == 'x') {
+                    editedGridLine.push(false);
+                } else {
+                    editedGridLine.push(numvalue);
+                }
+            }
+            console.log(editedGridLine);
+            const gridLine = [];
+            for (let i = 0; i < cellGrid.length; i++) {
+                gridLine.push(cellGrid[i][col])
+            }
+            if (JSON.stringify(editedGridLine) === JSON.stringify(gridLine)) {
+                drawPixelText(number.toString(), xPos, yPos, false, "#6b6b6b");
+            } else {
+                drawPixelText(number.toString(), xPos, yPos);
+            }
         }
     }
     var completeLength = puzzleComplete.toString().length -1
-    drawPixelText(puzzleComplete+"%", startX - 10 - completeLength*5, startY-15);
+    drawPixelText(puzzleComplete+"%", startX - 10 - completeLength*5, startY-20);
     if (puzzleComplete == 100) {
         ctx.drawImage(imageIMG, startX, startY - 0.5);
     } else {
@@ -369,12 +411,17 @@ function gameDraw() {
 
     var maxTimeCounter = 30;
     if (gotItWrong && gotitwrongcounter < maxTimeCounter) {
-        drawPixelText("-2", textCoordinates.x, textCoordinates.y);
+        drawPixelText("-2", textCoordinates.x, textCoordinates.y, true);
         gotitwrongcounter++;
     }
     if (gotitwrongcounter == maxTimeCounter) {
         gotItWrong = false;
         gotitwrongcounter = 0;
+    }
+
+    drawPixelText(`Error:${mistakes}`, startX - 30, startY - 13);
+    if (die) {
+        ctx.drawImage(lostScreen, startX, startY);
     }
 }
 
@@ -414,7 +461,7 @@ document.addEventListener('pointerdown', (event) => {
     mouseCoords.y = Math.ceil(mouseCoords.y);
     mouseCoords.x -= 1;
     mouseCoords.y -= 1;
-    if (mouseCoords.x <= 9 && mouseCoords.x >= 0 && mouseCoords.y >= 0 && mouseCoords.y <= 9 && gameStart) {
+    if (mouseCoords.x <= 9 && mouseCoords.x >= 0 && mouseCoords.y >= 0 && mouseCoords.y <= 9 && gameStart && die == false) {
         if (event.button == 0) {    
             if (cellGrid[mouseCoords.y][mouseCoords.x] == true) {
                 newCellGrid[mouseCoords.y][mouseCoords.x] = true;
@@ -428,9 +475,10 @@ document.addEventListener('pointerdown', (event) => {
                 if (die != true) {
                     minute -= 2;
                 }
+
+                mistakes++;
             }
         } else if (event.button == 2) {
-
             newCellGrid[mouseCoords.y][mouseCoords.x] = "x";
         } 
         
