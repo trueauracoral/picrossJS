@@ -5,5 +5,8 @@ Hi world, this is a remake of picross in javascript. It is pretty cool.
 ** TODO [%]
 - [X] Percentage wheele
 - [ ] Check off the width/height markers when completed. make gray.
-- [ ] Tutorial
+- [X] Tutorial
 - [ ] Add 3 more puzzles
+- [ ] Errors counter
+- [ ] Outline error -2
+- [ ] Fix it so that way the cross lines are black but not the otherliens
