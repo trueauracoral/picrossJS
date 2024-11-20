@@ -2,7 +2,7 @@
 from PIL import Image
 
 # Open image
-imagename = "redpanda.png"
+imagename = "baby hippo.png"
 image = Image.open(imagename)
 # COLOR OF OUTLINE IN THE IMAGE
 outlineColor = (0,0,0)

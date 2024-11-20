@@ -174,6 +174,18 @@ var puzzleData = [
         ],
         ImageString: "redpanda",
     },
+    {
+        horizontalMeasurers: [
+            [10], [1, 2, 2, 1], [10], [1, 4, 1], [2, 1, 1, 2], [10], [3, 3], [3, 3], [1, 2, 2, 1], [4, 4]
+        ],
+        verticalMeasurers: [
+            [10], [1, 1, 4, 1], [3, 5], [6, 2], [1, 2, 1], [1, 2, 1], [6, 2], [3, 5], [1, 1, 4, 1], [10]
+        ],
+        cellGrid: [
+            [true, true, true, true, true, true, true, true, true, true], [true, false, true, true, false, false, true, true, false, true], [true, true, true, true, true, true, true, true, true, true], [true, false, false, true, true, true, true, false, false, true], [true, true, false, true, false, false, true, false, true, true], [true, true, true, true, true, true, true, true, true, true], [true, true, true, false, false, false, false, true, true, true], [true, true, true, false, false, false, false, true, true, true], [true, false, true, true, false, false, true, true, false, true], [true, true, true, true, false, false, true, true, true, true]
+        ],
+        ImageString: "baby hippo",
+    },
 ]
 var newCellGrid = [];
 var horizontalMeasures = []
