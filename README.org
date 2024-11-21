@@ -6,6 +6,6 @@ Hi world, this is a remake of picross in javascript. It is pretty cool.
 - [X] Percentage wheele
 - [X] Check off the width/height markers when completed. make gray.
 - [X] Tutorial
-- [ ] Add 3 more puzzles
+- [X] Add 3 more puzzles
 - [X] Errors counter
 - [X] Outline error -2
