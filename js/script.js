@@ -241,29 +241,33 @@ function puzzleLoad(number) {
     gameStart = true;
     gameLoop();
 }
-
+// Delete this
 puzzleLoad(0);
 var minute = 20;
 var sec = 60;
 var counter = 0;
 minute--;
 function gameUpdate() {
-    counter++;
-    minute = minute.toString().padStart(2, '0');
-    sec = sec.toString().padStart(2, '0');
+    console.log(gameStart);
+
     drawPixelText(`${minute}: ${sec}`, startX-20, startY-28);
-    if (counter % 60 == 0) {
-        if (minute <= 0) {
-            die = true;
-            minute = 0;
-            sec = 0;
-            counter = 0;
-            return;
-        } else {
-            sec--;
-            if (sec == 0) {
-                minute--;
-                sec = 60;
+    if (gameStart == true) {
+        counter++;
+        minute = minute.toString().padStart(2, '0');
+        sec = sec.toString().padStart(2, '0');
+        if (counter % 60 == 0) {
+            if (minute <= 0) {
+                die = true;
+                minute = 0;
+                sec = 0;
+                counter = 0;
+                return;
+            } else {
+                sec--;
+                if (sec == 0) {
+                    minute--;
+                    sec = 60;
+                }
             }
         }
     }
@@ -401,7 +405,6 @@ function gameDraw() {
                     editedGridLine.push(numvalue);
                 }
             }
-            console.log(editedGridLine);
             const gridLine = [];
             for (let i = 0; i < cellGrid.length; i++) {
                 gridLine.push(cellGrid[i][col])
@@ -416,6 +419,7 @@ function gameDraw() {
     var completeLength = puzzleComplete.toString().length -1
     drawPixelText(puzzleComplete+"%", startX - 10 - completeLength*5, startY-20);
     if (puzzleComplete == 100) {
+        gameStart = false;
         ctx.drawImage(imageIMG, startX, startY - 0.5);
     } else {
         drawGrid(startX, startY, 60, 60, 6);
