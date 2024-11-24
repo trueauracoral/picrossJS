@@ -11,7 +11,7 @@ ctx.imageSmoothingEnabled = false;
 
 const scalingFactor = 8;
 canvas.width = 120 * scalingFactor;
-canvas.height = 100 * scalingFactor;
+canvas.height = 90 * scalingFactor;
 ctx.scale(scalingFactor, scalingFactor);
 
 const halfWidth = canvas.width / 2;
