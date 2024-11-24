@@ -199,14 +199,8 @@ function puzzleLoad(number) {
     ImageString = puzzleData[puzzlenumber]["ImageString"];
     imageIMG_white = loadImage(`./img/${ImageString}-white.png`);
     imageIMG = loadImage(`./img/${ImageString}.png`);
-    horizontalMeasures = puzzleData[puzzlenumber]["horizontalMeasurers"];
-    verticalMeasurers = puzzleData[puzzlenumber]["verticalMeasurers"];
-    for (var i = 0; i < verticalMeasurers.length; i++) {
-        verticalMeasurers[i] = verticalMeasurers[i].reverse();
-    }
-    for (var i = 0; i < horizontalMeasures.length; i++) {
-        horizontalMeasures[i] = horizontalMeasures[i].reverse();
-    }
+    horizontalMeasures = puzzleData[puzzlenumber]["horizontalMeasurers"].map(row => [...row].reverse());
+    verticalMeasurers = puzzleData[puzzlenumber]["verticalMeasurers"].map(row => [...row].reverse());
     cellGrid = puzzleData[puzzlenumber]["cellGrid"]
     correctCounter = 0;
     for (var row = 0; row < cellGrid.length; row++) {
@@ -239,10 +233,9 @@ function puzzleLoad(number) {
     sec = 59;
     puzzleComplete = 0;
     gameStart = true;
-    gameLoop();
 }
 // Delete this
-puzzleLoad(0);
+//puzzleLoad(0);
 var minute = 20;
 var sec = 60;
 var counter = 0;
@@ -441,7 +434,10 @@ function gameDraw() {
     }
 }
 
-function gameLoop() {
+function gameLoop(gameClose=false) {
+    if (gameClose == true) {
+        return;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     window.requestAnimationFrame(gameLoop);
@@ -516,4 +512,4 @@ document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 });
 
-//gameLoop();
+gameLoop();
